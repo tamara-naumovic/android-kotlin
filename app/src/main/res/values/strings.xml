@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">ToDo</string>
+    <string name="app_name_lower">todo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="design">design</string>
 </resources>
