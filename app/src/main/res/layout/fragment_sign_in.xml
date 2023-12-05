@@ -76,7 +76,8 @@
                 android:inputType="textEmailAddress"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:paddingTop="15dp" />
+                android:paddingTop="15dp"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>
     <!--Password component-->
@@ -112,7 +113,8 @@
                 android:inputType=""
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:paddingTop="15dp" />
+                android:paddingTop="15dp"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
     </com.google.android.material.card.MaterialCardView>
     <TextView
