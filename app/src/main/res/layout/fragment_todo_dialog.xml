@@ -51,7 +51,9 @@
                     android:hint="@string/type_your_task"
                     android:inputType="textEmailAddress"
                     android:paddingStart="12dp"
-                    android:paddingTop="15dp" />
+                    android:paddingTop="15dp"
+                    android:textColor="@color/black"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
         </com.google.android.material.card.MaterialCardView>

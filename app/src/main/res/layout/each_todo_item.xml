@@ -12,7 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp">
+        android:paddingVertical="20dp"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/todoTask"
