@@ -110,7 +110,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white"
                 android:hint="@string/type_your_pass"
-                android:inputType=""
+                android:inputType="textPassword"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:paddingTop="15dp"
