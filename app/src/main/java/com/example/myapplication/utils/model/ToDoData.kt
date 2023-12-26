@@ -1,4 +1,3 @@
 package com.example.myapplication.utils.model
 
-class ToDoData {
-}
+data class ToDoData(var taskId:String, var task:String)
