@@ -1,6 +1,7 @@
 package com.example.myapplication.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,10 @@ import com.example.myapplication.utils.adapter.TaskAdapter
 import com.example.myapplication.utils.model.ToDoData
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -57,6 +61,7 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
         init(view)
         showAddTaskDialog()
         signOut()
+        getTasksFromDatabase()
 
 
     }
@@ -95,7 +100,23 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     }
 
     private fun getTasksFromDatabase(){
+        database.addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                toDoItemList.clear()
+                for(taskSnapshot in snapshot.children){
+                    val todoTask = taskSnapshot.key?.let { ToDoData(it, taskSnapshot.value.toString()) }
+                    if (todoTask!=null){
+                        toDoItemList.add(todoTask)
+                    }
+                }
+                Log.d(TAG, "onDataChanged"+toDoItemList)
+                taskAdapter.notifyDataSetChanged()
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context,error.toString(), Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun onSaveTask(todoTask: String, todoEt: TextInputEditText) {
