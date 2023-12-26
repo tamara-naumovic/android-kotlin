@@ -9,6 +9,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.utils.adapter.TaskAdapter
+import com.example.myapplication.utils.model.ToDoData
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
@@ -21,12 +24,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
-
+class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener, TaskAdapter.TaskAdapterClickInterface {
+    private val TAG = "Home Fragment"
     private lateinit var auth: FirebaseAuth
     private lateinit var authId: String
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
+
+    private var popUpFragment: TodoDialogFragment?=null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +46,18 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         init(view)
+        showAddTaskDialog()
 
+    }
+
+    private fun showAddTaskDialog(){
+        binding.addBtnHome.setOnClickListener {
+            if (popUpFragment!=null)
+                childFragmentManager.beginTransaction().remove(popUpFragment!!).commit()
+            popUpFragment = TodoDialogFragment()
+            popUpFragment!!.setListener(this)
+            popUpFragment!!.show(childFragmentManager, TodoDialogFragment.TAG)
+        }
     }
 
     private fun signOut(){
@@ -56,6 +73,22 @@ class HomeFragment : Fragment() {
             signOut()
             navController.navigate(R.id.action_homeFragment_to_signInFragment)
         }
+    }
+
+    override fun onSaveTask(todoTask: String, todoEt: TextInputEditText) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onUpdateTask(toDoData: ToDoData, todoEdit: TextInputEditText) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeleteItemClicked(toDoData: ToDoData, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEditItemClicked(toDoData: ToDoData, position: Int) {
+        TODO("Not yet implemented")
     }
 
 }
