@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.utils.adapter.TaskAdapter
@@ -55,6 +56,8 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
 
         init(view)
         showAddTaskDialog()
+        signOut()
+
 
     }
 
@@ -69,7 +72,10 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     }
 
     private fun signOut(){
-        auth.signOut()
+        binding.logout.setOnClickListener {
+            auth.signOut()
+            navController.navigate(R.id.action_homeFragment_to_signInFragment)
+        }
     }
 
     private fun init(view:View) {
@@ -78,10 +84,18 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
         authId = auth.currentUser!!.uid
         database = Firebase.database.reference.child("Tasks").child(authId) //kreiranje kolekcije taskova sortiranih po IDu korisnika koji ih je dodao
 
-        binding.logout.setOnClickListener {
-            signOut()
-            navController.navigate(R.id.action_homeFragment_to_signInFragment)
-        }
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+
+        toDoItemList = mutableListOf()
+        taskAdapter = TaskAdapter(toDoItemList)
+        taskAdapter.setListener(this)
+        binding.recyclerView.adapter = taskAdapter
+
+    }
+
+    private fun getTasksFromDatabase(){
+
     }
 
     override fun onSaveTask(todoTask: String, todoEt: TextInputEditText) {
