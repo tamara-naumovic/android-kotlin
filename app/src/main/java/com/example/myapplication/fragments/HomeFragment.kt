@@ -149,7 +149,13 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     }
 
     override fun onEditItemClicked(toDoData: ToDoData, position: Int) {
-        TODO("Not yet implemented")
+        if (popUpFragment!=null){
+            childFragmentManager.beginTransaction().remove(popUpFragment!!).commit()
+        }
+
+        popUpFragment = TodoDialogFragment.newInstance(toDoData.taskId,toDoData.task)
+        popUpFragment!!.setListener(this)
+        popUpFragment!!.show(childFragmentManager,TodoDialogFragment.TAG)
     }
 
 }
