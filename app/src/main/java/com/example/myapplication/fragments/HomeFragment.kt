@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.myapplication.R
@@ -13,6 +14,9 @@ import com.example.myapplication.utils.adapter.TaskAdapter
 import com.example.myapplication.utils.model.ToDoData
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,8 +34,12 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     private lateinit var authId: String
     private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
+    private lateinit var database: DatabaseReference
 
     private var popUpFragment: TodoDialogFragment?=null
+
+    private lateinit var taskAdapter: TaskAdapter
+    private lateinit var toDoItemList: MutableList<ToDoData>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,6 +76,7 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
         navController = Navigation.findNavController(view)
         auth = FirebaseAuth.getInstance()
         authId = auth.currentUser!!.uid
+        database = Firebase.database.reference.child("Tasks").child(authId) //kreiranje kolekcije taskova sortiranih po IDu korisnika koji ih je dodao
 
         binding.logout.setOnClickListener {
             signOut()
@@ -76,7 +85,18 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     }
 
     override fun onSaveTask(todoTask: String, todoEt: TextInputEditText) {
-        TODO("Not yet implemented")
+        database
+            .push().setValue(todoTask)
+            .addOnCompleteListener {
+                if (it.isSuccessful){
+                    Toast.makeText(context,"Dodat task", Toast.LENGTH_SHORT).show()
+                    todoEt.text = null
+                }else{
+                    Toast.makeText(context,it.exception.toString(), Toast.LENGTH_LONG).show()
+
+                }
+            }
+        popUpFragment!!.dismiss()
     }
 
     override fun onUpdateTask(toDoData: ToDoData, todoEdit: TextInputEditText) {
