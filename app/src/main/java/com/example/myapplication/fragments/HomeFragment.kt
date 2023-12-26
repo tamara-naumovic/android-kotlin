@@ -135,7 +135,17 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     }
 
     override fun onUpdateTask(toDoData: ToDoData, todoEdit: TextInputEditText) {
-        TODO("Not yet implemented")
+        val map = HashMap<String,Any>() //mapiraju se taskovi(taskId, task) - kao String, Any (moglo je biti String, String)
+        map[toDoData.taskId] = toDoData.task
+        database.updateChildren(map).addOnCompleteListener {
+            if (it.isSuccessful){
+                Toast.makeText(context, "Uspesno azuriran task", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context,it.exception.toString(),Toast.LENGTH_SHORT).show()
+            }
+            popUpFragment!!.dismiss()
+        }
+
     }
 
     override fun onDeleteItemClicked(toDoData: ToDoData, position: Int) {
