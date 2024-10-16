@@ -1,5 +1,10 @@
 package com.example.myapplication.fragments
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,6 +53,12 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var toDoItemList: MutableList<ToDoData>
 
+    val CHANNEL_ID = "channelID"
+    val CHANNEL_NAME = "channelName"
+    private lateinit var notifyMen:NotificationManager
+    val NOTIFICATION_ID = 0
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,8 +75,18 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
         showAddTaskDialog()
         signOut()
         getTasksFromDatabase()
+    }
 
-
+    private fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+                .apply {
+                    lightColor = Color.RED
+                    enableLights(true)
+                }
+            notifyMen = (requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?)!!
+            notifyMen.createNotificationChannel(channel)
+        }
     }
 
     private fun showAddTaskDialog(){
@@ -97,6 +120,7 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
         taskAdapter.setListener(this)
         binding.recyclerView.adapter = taskAdapter
 
+        createNotificationChannel()
     }
 
     private fun getTasksFromDatabase(){
@@ -124,7 +148,17 @@ class HomeFragment : Fragment(), TodoDialogFragment.OnDialogNextBtnClickListener
             .push().setValue(todoTask)
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    Toast.makeText(context,"Dodat task", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context,"Dodat task", Toast.LENGTH_SHORT).show()
+                    //custom notification
+                    val notification = NotificationCompat.Builder(requireContext(), CHANNEL_ID)
+                        .setContentTitle("Task Notification")
+                        .setContentText("Task uspesno dodat")
+                        .setSmallIcon(R.drawable.baseline_android_24)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .build()
+                    val notifyMenCompat: NotificationManagerCompat = NotificationManagerCompat.from(requireContext())
+                    notifyMenCompat.notify(NOTIFICATION_ID, notification)
+
                     todoEt.text = null
                 }else{
                     Toast.makeText(context,it.exception.toString(), Toast.LENGTH_LONG).show()

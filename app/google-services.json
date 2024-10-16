@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "655644169537",
-    "project_id": "todokotlin-a5626",
-    "storage_bucket": "todokotlin-a5626.appspot.com"
+    "project_number": "843791498912",
+    "firebase_url": "https://testproj-5eafb111-default-rtdb.firebaseio.com",
+    "project_id": "testproj-5eafb111",
+    "storage_bucket": "testproj-5eafb111.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:655644169537:android:d0d15fe6a7054bacaefdc0",
+        "mobilesdk_app_id": "1:843791498912:android:87e5acde5ff2ff985713c5",
         "android_client_info": {
           "package_name": "com.example.myapplication"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCYUPTduQe1vwUc8v0jc8ETGRTQBp-2cvE"
+          "current_key": "AIzaSyBYdbzSjCDgFWvU1Y3zvcv4K766vntlx2U"
         }
       ],
       "services": {
